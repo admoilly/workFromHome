@@ -15,10 +15,10 @@ public class ConnectionPool {
 
     static String JDBC_DRIVER =null;
     static String JDBC_DB_URL =null;
-    static ResultSet rsObj=null;
-    static Connection connObj = null;
-    static PreparedStatement pstmtObj = null;
-    static ConnectionPool jdbcObj = new ConnectionPool();
+    static ResultSet resultSetObject =null;
+    static Connection connectionObject = null;
+    static PreparedStatement preparedStatement = null;
+    static ConnectionPool jdbcConnectionPool = new ConnectionPool();
     static String JDBC_USER = null;
     static String JDBC_PASS = null;
 
@@ -42,14 +42,21 @@ public class ConnectionPool {
         System.out.println("Max.: " + getConnectionPool().getMaxActive() + "; Active: " + getConnectionPool().getNumActive() + "; Idle: " + getConnectionPool().getNumIdle());
     }
 
-    public static ResultSet resultSetReadData(String sqlQuery){
+    private static ResultSet resultSet(String sqlQuery){
         try {
-            DataSource dataSource = jdbcObj.setUpPool();
-            connObj = dataSource.getConnection();
-            jdbcObj.printDbStatus();
-            pstmtObj = connObj.prepareStatement(sqlQuery);
-            rsObj = pstmtObj.executeQuery();
+            DataSource dataSource = jdbcConnectionPool.setUpPool();
+            connectionObject = dataSource.getConnection();
+            preparedStatement = connectionObject.prepareStatement(sqlQuery);
+            resultSetObject = preparedStatement.executeQuery();
         } catch(Exception ignored) {}
-        return rsObj;
+        return resultSetObject;
+    }
+
+    public static ResultSet  readData(String driver,String dburl,String user,String pass,String sqlQuery) throws SQLException {
+        JDBC_DB_URL=dburl;
+        JDBC_DRIVER=driver;
+        JDBC_USER=user;
+        JDBC_PASS=pass;
+        return resultSet(sqlQuery);
     }
 }
