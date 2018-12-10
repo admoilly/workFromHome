@@ -3,24 +3,23 @@ package com.jcg.jdbc.connection.pooling;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.jcg.jdbc.connection.pooling.ConnectionPool.resultSetReadData;
-
 /**
  * Created by Amit Sharma on 12/11/2018.
  */
-public class dbImpl {
+public class dbImpl extends ConnectionPool{
     public static void main(String[] args) throws SQLException {
-        ConnectionPool.JDBC_DB_URL="jdbc:mysql://localhost:3306/world?useSSL=false";
-        ConnectionPool.JDBC_DRIVER="com.mysql.jdbc.Driver";
-        ConnectionPool.JDBC_USER="root";
-        ConnectionPool.JDBC_PASS="root";
-        ResultSet rs=resultSetReadData("select top 10 * from City");
+        ResultSet rs=readData("com.mysql.jdbc.Driver",
+                "jdbc:mysql://localhost:3306/world?useSSL=false",
+                "root",
+                "root",
+                "select distinct District from city where CountryCode='IND'");
+        jdbcConnectionPool.printDbStatus();
         while (rs.next()){
-            System.out.println(rs.getString("Name"));
+            System.out.println(rs.getString("District"));
         }
-        ConnectionPool.rsObj.close();
-        ConnectionPool.connObj.close();
-        ConnectionPool.pstmtObj.close();
-        ConnectionPool.jdbcObj.printDbStatus();
+        resultSetObject.close();
+        connectionObject.close();
+        preparedStatement.close();
+        jdbcConnectionPool.printDbStatus();
     }
 }
