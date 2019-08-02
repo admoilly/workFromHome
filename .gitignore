@@ -1,0 +1,12 @@
+target/
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+### IntelliJ IDEA ###
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+### VS Code ###
